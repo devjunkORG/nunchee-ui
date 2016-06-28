@@ -1,0 +1,19 @@
+{
+  "name": "nunchee-ui",
+  "version": "1.0.0",
+  "description": "Nunchee UI ReactJS Components",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/devjunkORG/nunchee-ui.git"
+  },
+  "author": "Vicente Canales <me@devjunk.org>",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "bugs": {
+    "url": "https://github.com/devjunkORG/nunchee-ui/issues"
+  },
+  "homepage": "https://github.com/devjunkORG/nunchee-ui#readme"
+}
