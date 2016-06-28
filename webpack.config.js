@@ -10,7 +10,7 @@ var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
 module.exports = {
     cache: true,
     entry: {
-        main:  './index.js'
+        main:  './src/index.js'
     },
     output: {
         path: './build',
