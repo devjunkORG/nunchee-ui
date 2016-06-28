@@ -7,7 +7,7 @@
     "build": "webpack --progress --colors -p --optimize-minimize",
     "babel-version": "babel --version",
     "babel": "babel --presets es2015 --ignore node_modules,public",
-    "build": "npm run babel -- ./index.js -d ./lib"
+    "build": "npm run babel -- ./src -d ./lib"
   },
   "repository": {
     "type": "git",
