@@ -2,6 +2,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import language from 'nunchee-language';
+language('es');
 import _ from 'lodash';
 
 class Select extends React.Component {
@@ -9,12 +10,23 @@ class Select extends React.Component {
     constructor(props) {
         super(props);
         this.getDefault = this.getDefault.bind(this);
+        this.createSelect = this.createSelect.bind(this);
     }
 
     componentDidMount() {
+        this.createSelect(this.props);
+    }
+    componentWillReceiveProps(props) {
+        this.createSelect(props);
+    }
+
+    createSelect(props) {
         let options = {};
-        if (this.props.onChange && this.props.onChange instanceof Function) {
-            options.onChange = this.props.onChange;
+        if (props.onChange && props.onChange instanceof Function) {
+            options.onChange = props.onChange;
+        }
+        if (props.allowAdditions) {
+            options.allowAdditions = props.allowAdditions;
         }
         $(this._select).dropdown(options);
     }
@@ -62,7 +74,7 @@ class Select extends React.Component {
                                     );
                                 }
                                 return (
-                                    <div key={i} className="item" data-value={v._id || v.value}>{language(v.name,'original')}</div>
+                                    <div key={i} className="item" data-value={v._id || v.value}>{language()._(v.name)}</div>
                                 );
                             })
                             :
@@ -83,11 +95,13 @@ Select.propTypes = {
     label: React.PropTypes.string,
     search: React.PropTypes.bool,
     multiple: React.PropTypes.bool,
-    onChanges: React.PropTypes.func
+    onChanges: React.PropTypes.func,
+    allowAdditions: React.PropTypes.bool
 };
 Select.defeaultProps = {
     search: false,
-    multiple: false
+    multiple: false,
+    allowAdditions: false
 };
 
 export default Select;
