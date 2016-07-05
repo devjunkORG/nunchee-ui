@@ -67,6 +67,12 @@ class Form extends React.Component {
         $(this._form).form(formOptions);
     }
 
+    onSubmit(e) {
+        if (this.props.onSubmit) {
+            return this.props.onSubmit(e);
+        }
+    }
+
     submit(e,action,fields) {
         if (this.props.onSubmit) {
             return this.props.onSubmit(e,action,fields);
@@ -134,6 +140,7 @@ class Form extends React.Component {
                 ref={form => { this._form = form; }}
                 action={this.props.options.setup.action}
                 className={ formClasses }
+                onSubmit={ this.onSubmit }
             >
                 <input
                     type="hidden"
@@ -154,6 +161,10 @@ class Form extends React.Component {
         );
     }
 }
+
+Form.propTypes = {
+    onSubmit: React.PropTypes.func
+};
 
 export {
     Form,

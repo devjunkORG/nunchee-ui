@@ -2,6 +2,7 @@ import ReactCalendar from 'rc-calendar';
 import DatePicker from 'rc-calendar/lib/Picker';
 import DateTimeFormat from 'gregorian-calendar-format';
 import CalendarLocale from 'rc-calendar/lib/locale/en_US';
+import moment from 'moment';
 
 import React from 'react';
 
@@ -33,6 +34,7 @@ class Calendar extends React.Component {
 
     render() {
         const dateFormatter = new DateTimeFormat('dd-MM-yyyy');
+        const defaultValue = this.props.defaultValue;
         return (
             <div className="field">
                 <div ref={ calContainer => { this._calendar = calContainer; }}
@@ -58,7 +60,7 @@ class Calendar extends React.Component {
                             <span>
                             <input
                               readOnly
-                              value={value && dateFormatter.format(value) || ''}
+                              value={value && dateFormatter.format(value) || defaultValue && moment(defaultValue).format('DD-MM-YYYY')}
                               style={ { cursor: 'text' } }
                             />
                             </span>
@@ -70,5 +72,13 @@ class Calendar extends React.Component {
         );
     }
 }
+
+Calendar.propTypes = {
+    defaultValue: React.PropTypes.string
+};
+Calendar.defaultProps = {
+    defaultValue: ''
+};
+
 
 export default Calendar;
