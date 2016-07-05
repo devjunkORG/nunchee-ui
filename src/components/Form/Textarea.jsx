@@ -8,6 +8,11 @@ class Textarea extends React.Component {
 
     constructor(props) {
         super(props);
+        this.focusRichEditor = this.focusRichEditor.bind(this);
+    }
+
+    focusRichEditor() {
+        this._editor.focus();
     }
 
     blockStyle(contentBlock) {
@@ -27,9 +32,9 @@ class Textarea extends React.Component {
     render() {
         if (this.props.rich) {
             return (
-                <div className="rich textarea field">
+                <div onClick={ this.focusRichEditor } className="rich textarea field">
                     <label>{ this.props.label }</label>
-                    <Editor {...this.props} blockTypes={ Blocks }></Editor>
+                    <Editor ref={ editor => this._editor = editor } {...this.props} blockTypes={ Blocks }></Editor>
                 </div>
             );
         } else {
