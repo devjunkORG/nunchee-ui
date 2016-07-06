@@ -11,20 +11,18 @@ class addBig extends React.Component {
         let elementStyle = {
             color: '#d6d6d6',
             display: 'flex',
-            alignItems: 'center'
+            alignItems: 'center',
+            position: 'relative'
         };
         let buttonStyle = {
             display: 'flex',
+            position: 'relative',
             justifyContent: 'center',
             alignItems: 'center',
             width: '80px',
             height: '80px',
             border: '2px dashed #d6d6d6',
             marginRight: '10px'
-        };
-        let textStyle = {
-            padding: 0,
-            margin: 0
         };
         if (this.props.style) {
             _.forIn(this.props.style,(value,key) => {
