@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import AddButton from '../Buttons/addBig';
 
 class File extends React.Component {
