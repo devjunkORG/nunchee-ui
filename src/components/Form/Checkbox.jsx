@@ -19,7 +19,7 @@ class Checkbox extends React.Component {
                 <div className="field">
                     <label>{this.props.children}</label>
                     <div className={ classes }>
-                        <input type="checkbox" name={this.props.name} checked={this.props.checked}/>
+                        <input type="checkbox" name={this.props.name} defaultChecked={this.props.checked}/>
                         <label></label>
                     </div>
                 </div>
@@ -27,7 +27,7 @@ class Checkbox extends React.Component {
         }
         return (
             <div className={ classes }>
-                <input type="checkbox" name={this.props.name} checked={this.props.checked}/>
+                <input type="checkbox" name={this.props.name} defaultChecked={this.props.checked}/>
                 <label>{this.props.children}</label>
             </div>
         );
