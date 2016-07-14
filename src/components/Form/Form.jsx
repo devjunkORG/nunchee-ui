@@ -19,6 +19,7 @@ class Form extends React.Component {
 
     constructor() {
         super();
+        this.initializeForm = this.initializeForm.bind(this);
         this.submit = this.submit.bind(this);
     }
     /*
@@ -26,12 +27,25 @@ class Form extends React.Component {
         don't have to be loaded twice
     */
     componentDidMount() {
+        this.initializeForm();
+    }
+    componentWillReceiveProps() {
+        this.initializeForm();
+    }
+
+    onSubmit(e) {
+        if (this.props.onSubmit) {
+            return this.props.onSubmit(e);
+        }
+    }
+
+    initializeForm() {
+        $(this._form).form('destroy');
         let formOptions = {
             fields: { }
         };
         formOptions.onSuccess = (e,fields) => {
             e.preventDefault();
-
             let action;
             if (this.props.options &&
                 this.props.options.setup &&
@@ -40,7 +54,7 @@ class Form extends React.Component {
             } else {
                 action = this.props.action || '';
             }
-            if (action.length < 1) {
+            if (!this.props.onSubmit && action.length < 1) {
                 return false;
             }
             this.submit(null,action,fields);
@@ -65,12 +79,6 @@ class Form extends React.Component {
             }
         }
         $(this._form).form(formOptions);
-    }
-
-    onSubmit(e) {
-        if (this.props.onSubmit) {
-            return this.props.onSubmit(e);
-        }
     }
 
     submit(e,action,fields) {
