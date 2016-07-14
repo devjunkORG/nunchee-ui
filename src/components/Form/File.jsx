@@ -1,5 +1,7 @@
 import React from 'react';
 import AddButton from '../Buttons/addBig';
+import sha1 from 'sha1';
+import _ from 'lodash';
 
 class File extends React.Component {
 
@@ -28,27 +30,43 @@ class File extends React.Component {
         // this._fileInput.click();
     }
 
+    removeFile(item,e) {
+        e.preventDefault();
+        let files = this.state.files;
+        files = _.without(files,_.find(files,item));
+        this.setState({ files: files });
+    }
+
     processUpload(e) {
         if (e.target.files && e.target.files.length > 0) {
             this.addFile(e.target.files[0]);
+            // reset the input so if the user adds the same image again after removing it from the
+            // list, the onChange event is triggered.
+            e.target.value = '';
         }
     }
 
     addFile(file) {
-        let reader = new FileReader();
-        reader.onload = event => {
+        const reader = new FileReader();
+        const createFile = (event,file) => {
             let files = this.state.files;
-            let file = {
-                name: event.target.name,
-                size: event.target.size,
+            let data = {
+                id: sha1(`${file.name}${file.size}${event.target.result}`),
+                name: file.name,
+                size: file.size,
                 url: `url(${event.target.result})`
             };
             if (this.props.multiple) {
-                files.push(file);
+                files.push(data);
                 return this.setState({ files: files });
             }
-            return this.setState({ files: [ file ]});
+            return this.setState({ files: [ data ]});
         };
+        reader.onload = (file => {
+            return function(e) {
+                createFile(e,file);
+            };
+        })(file);
         reader.readAsDataURL(file);
     }
 
@@ -96,8 +114,11 @@ class File extends React.Component {
                             borderRadius: '4px',
                             backgroundImage: item.url
                         };
-                        return <div key={ key } style={ itemStyle }>
-
+                        return <div key={ key } className="item file upload" style={ itemStyle }>
+                            <div className="file settings">
+                                <button className="close button" onClick={ this.removeFile.bind(this,item) }><i className="close icon"></i></button>
+                                <button className="edit button"><i className="icon-write icon"></i></button>
+                            </div>
                         </div>;
                     })}
                 </div>
