@@ -31,7 +31,7 @@ class Separator extends React.Component {
                             left: '45%',
                             width: this.props.size || 25,
                             height: this.props.size || 25,
-                            border: `1px solid ${this.props.color}`,
+                            border: this.props.circled ? `1px solid ${this.props.color}` : 'none',
                             color: this.props.color,
                             borderRadius: '100%',
                             padding: '1rem',
