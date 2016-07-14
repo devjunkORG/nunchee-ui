@@ -22,7 +22,7 @@ class Separator extends React.Component {
                 <div style={{
                     borderBottom: `1px solid ${this.props.color}`,
                     position: 'relative',
-                    marginBottom: '2rem',
+                    margin: '2rem 0',
                     width: '100%'
                 }}>
                     <div
