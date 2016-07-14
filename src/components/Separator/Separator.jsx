@@ -49,12 +49,14 @@ class Separator extends React.Component {
 Separator.propTypes = {
     children: React.PropTypes.string,
     color: React.PropTypes.string,
-    backgroundColor: React.PropTypes.string
+    backgroundColor: React.PropTypes.string,
+    circled: React.PropTypes.bool
 };
 Separator.defaultProps = {
     children: 'SP',
     backgroundColor: '#fff',
-    color: '#000'
+    color: '#000',
+    circled: false
 };
 
 export default Separator;
