@@ -22,14 +22,15 @@ class Table extends React.Component {
             rows.unshift(this.props.defaultRow);
         }
         this.state = {
-            rows: rows
+            rows: []
         };
     }
 
     componentWillReceiveProps(newProps) {
-        const currentRows = this.props.rows;
+        const currentRows = this.state.rows;
+        const expectedInitialRows = this.props.defaultRow ? 1 : 0;
         let rows = newProps.rows.map(item => {
-            if (currentRows.length > 0 && !_.find(currentRows,item)) {
+            if (currentRows.length > expectedInitialRows && !_.find(currentRows,item)) {
                 item._new = true;
             }
             return item;
