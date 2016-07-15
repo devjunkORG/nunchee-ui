@@ -59,9 +59,10 @@ class Calendar extends React.Component {
                           return (
                             <span>
                             <input
-                              readOnly
-                              value={value && dateFormatter.format(value) || defaultValue && moment(defaultValue).format('DD-MM-YYYY')}
-                              style={ { cursor: 'text' } }
+                                name={ this.props.name }
+                                readOnly
+                                value={value && dateFormatter.format(value) || defaultValue && moment(defaultValue).format('DD-MM-YYYY')}
+                                style={ { cursor: 'text' } }
                             />
                             </span>
                         );
