@@ -10,13 +10,7 @@ class Table extends React.Component {
         super(props);
     }
 
-    render() {
-        let classes = classNames({
-            ui: true,
-            table: true,
-            admin: true
-        });
-
+    componentWillMount() {
         /*
          * objects are passed by reference, which means that in order to keep
          * the parent state data intact, we have to clone the object.
@@ -25,13 +19,38 @@ class Table extends React.Component {
          */
         let rows = _.clone(this.props.rows);
         if (this.props.defaultRow && !_.find(rows,this.props.defaultRow)) {
-            rows.splice(0,0,this.props.defaultRow);
+            rows.unshift(this.props.defaultRow);
         }
+        this.state = {
+            rows: rows
+        };
+    }
+
+    componentWillReceiveProps(newProps) {
+        const currentRows = this.props.rows;
+        let rows = newProps.rows.map(item => {
+            if (currentRows.length > 0 && !_.find(currentRows,item)) {
+                item._new = true;
+            }
+            return item;
+        });
+        if (newProps.defaultRow && !_.find(rows,newProps.defaultRow)) {
+            rows.unshift(newProps.defaultRow);
+        }
+        this.setState({ rows: rows });
+    }
+
+    render() {
+        let classes = classNames({
+            ui: true,
+            table: true,
+            admin: true
+        });
 
         return (
             <JsonTable
                 className={ classes }
-                rows={ rows }
+                rows={ this.state.rows }
                 columns={ this.props.columns }
                 settings={ this.props.settings }
             />
@@ -44,6 +63,6 @@ Table.propTypes = {
 };
 Table.defaultProps = {
     rows: []
-}
+};
 
 export default Table;
