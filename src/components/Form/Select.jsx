@@ -17,7 +17,9 @@ class Select extends React.Component {
         this.createSelect(this.props);
     }
     componentWillReceiveProps(props) {
-        this.createSelect(props);
+        if (!_.isEqual(props,this.props)) {
+            this.createSelect(props);
+        }
     }
 
     createSelect(props) {
@@ -57,7 +59,7 @@ class Select extends React.Component {
             <div className="field">
                 {this.props.label ? <label>{this.props.label}</label> : ''}
                 <div ref={(select) => this._select = select} className={ classes }>
-                    <input type="hidden" name={this.props.name} value={this.props.defaultValue} />
+                    <input ref={ input => this._selectInput = input }type="hidden" name={this.props.name} value={this.props.defaultValue} />
                     <i className="dropdown icon"></i>
                     <div className="default text">{this.getDefault() || this.props.placeholder}</div>
                     <div className="menu">

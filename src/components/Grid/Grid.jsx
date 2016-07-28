@@ -11,6 +11,11 @@ class Grid extends React.Component {
     render() {
         let classes = classNames({
             ui: true,
+            centered: this.props.centered || false,
+            right:     this.props.right || false,
+            left:       this.props.left || false,
+            aligned: this.props.aligned || false,
+            floated: this.props.floated || false,
             grid: true
         });
         return (
@@ -30,11 +35,15 @@ class Column extends React.Component {
     render() {
         let classes = {
             ui: true,
+            right:     this.props.right || false,
+            floated: this.props.floated || false,
+            aligned: this.props.aligned || false,
             column: true
         };
         if (this.props.width) {
             let word = n2w(this.props.width);
             classes[word] = true;
+            classes['wide'] = true;
         }
         classes = classNames(classes);
         return (

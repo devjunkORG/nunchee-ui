@@ -43,21 +43,21 @@ class Fields extends React.Component {
 
         classes = classNames(classes);
 
+        let children = moreThanOne ?
+        this.props.children.map((child,k) => {
+            if (child.props.noField) {
+                return (child);
+            }
+            return (
+                <div key={k} className={ fieldClasses }>
+                    {child}
+                </div>
+            );
+        }) : <div>{this.props.children}</div>;
+
         return (
             <div className={ classes } {...this.props}>
-                {
-                    moreThanOne ?
-                    this.props.children.map((child,k) => {
-                        if (child.props.noField) {
-                            return (child);
-                        }
-                        return (
-                            <div key={k} className={ fieldClasses }>
-                                {child}
-                            </div>
-                        );
-                    }) : <div>{this.props.children}</div>
-                }
+                { children }
             </div>
         );
     }

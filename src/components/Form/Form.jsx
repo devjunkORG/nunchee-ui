@@ -44,6 +44,18 @@ class Form extends React.Component {
         let formOptions = {
             fields: { }
         };
+        // function flattenChildren(fields) {
+        //     let inputs = _.reduce(fields,(prev,field) => {
+        //         return prev.concat((field && field.props && field.props.children && (_.isArray(field.props.children))) ? flattenChildren(field.props.children) : (field.props.children ? field.props.children : field));
+        //     },[]);
+        //     return inputs;
+        // }
+        // let rules = flattenChildren(this.props.children).map(child => {
+        //     let props = child.props;
+        //     if (props) {
+        //
+        //     }
+        // });
         formOptions.onSuccess = (e,fields) => {
             e.preventDefault();
             let action;
@@ -59,24 +71,27 @@ class Form extends React.Component {
             }
             this.submit(null,action,fields);
         };
-        formOptions.onFailure = (e) => {
-            e.preventDefault();
+        formOptions.onFailure = (errors,fields) => {
+            console.log(errors,fields);
         };
         if (!this.props.options || !this.props.options.fields) {
             return $(this._form).form(formOptions);
         }
-        for (let i in this.props.options.fields) {
-            let current = this.props.options.fields[i];
-            if (current.rules) {
-                /*
-                Ignore 'empty' (required) rule when method is PUT,
-                since editing doesn't work properly if all fields are required
-                */
-                if (this.props.options.setup.method === 'PUT') {
-                    current.rules = _.difference(current.rules,['empty']);
-                }
-                formOptions.fields[current.name] = current.rules;
-            }
+        // for (let i in this.props.options.fields) {
+        //     // let current = this.props.options.fields[i];
+        //     // if (current.rules) {
+        //     //     /*
+        //     //     Ignore 'empty' (required) rule when method is PUT,
+        //     //     since editing doesn't work properly if all fields are required
+        //     //     */
+        //     //     if (this.props.options.setup.method === 'PUT') {
+        //     //         current.rules = _.difference(current.rules,['empty']);
+        //     //     }
+        //     //     formOptions.fields[current.name] = current.rules;
+        //     // }
+        // }
+        if (this.props.options.fields) {
+            formOptions.fields = this.props.options.fields;
         }
         $(this._form).form(formOptions);
     }
@@ -122,25 +137,27 @@ class Form extends React.Component {
 
         for (let i in this.props.options.fields) {
             let element = this.props.options.fields[i];
-            switch(element.type) {
-            case 'text':
-                elements.push(<Input key={i} {...element} />);
-                break;
-            case 'password':
-                elements.push(<Input key={i} {...element} />);
-                break;
-            case 'select':
-                elements.push(<Select key={i} {...element} />);
-                break;
-            case 'color-picker':
-                elements.push(<ColorPicker key={i} {...element} />);
-                break;
-            case 'textarea':
-                elements.push(<Textarea key={i} {...element} />);
-                break;
-            case 'hidden':
-                elements.push(<input key={i} type="hidden" {...element} />);
-                break;
+            if (element.type) {
+                switch(element.type) {
+                case 'text':
+                    elements.push(<Input key={i} {...element} />);
+                    break;
+                case 'password':
+                    elements.push(<Input key={i} {...element} />);
+                    break;
+                case 'select':
+                    elements.push(<Select key={i} {...element} />);
+                    break;
+                case 'color-picker':
+                    elements.push(<ColorPicker key={i} {...element} />);
+                    break;
+                case 'textarea':
+                    elements.push(<Textarea key={i} {...element} />);
+                    break;
+                case 'hidden':
+                    elements.push(<input key={i} type="hidden" {...element} />);
+                    break;
+                }
             }
         }
         return (

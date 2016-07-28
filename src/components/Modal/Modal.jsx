@@ -1,3 +1,4 @@
+/* global $ */
 import React from 'react';
 import classNames from 'classnames';
 import ReactDOM from 'react-dom';
@@ -16,11 +17,26 @@ class Modal extends React.Component {
         //this.forceUpdate();
         let options = {
             onHidden: this.destroyModal,
+            onApprove: () => { return false; },
+            onDeny: () => { return false; },
             allowMultiple: this.props.options.allowMultiple || true
         };
         if (this.props.options) {
             for (let i in this.props.options) {
                 options[i] = this.props.options[i];
+            }
+        }
+        if (this.props.closeParent) {
+            const parent = this.props.closeParent;
+            let selector;
+            if (_.isObject(parent)) {
+                selector = parent._modal;
+            }
+            if (_.isString(parent)) {
+                selector = parent;
+            }
+            if (selector) {
+                $(selector).modal('hide');
             }
         }
         $(this._modal)
@@ -38,12 +54,12 @@ class Modal extends React.Component {
         let forms = $(this._modal).find('form');
         let hasForm = (forms.length > 0);
         if (hasForm) {
-            return $(forms[0]).form('submit');
+            return $(forms[0]).form('validate form');
         }
         if (_.find(this.props.options,{ closable: false })) {
             return false;
         }
-        return $(this._modal).modal('hide');
+
     }
 
     componentDidUpdate() {
@@ -57,7 +73,18 @@ class Modal extends React.Component {
     }
 
     destroyModal() {
-        $(this._modal).remove();
+        const parent = this.props.closeParent;
+        let selector;
+        if (_.isObject(parent)) {
+            selector = parent._modal;
+        }
+        if (_.isString(parent)) {
+            selector = parent;
+        }
+        if (selector) {
+            $(selector).modal('show');
+        }
+        // $(this._modal).remove();
     }
 
     render() {

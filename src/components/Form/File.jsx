@@ -10,6 +10,8 @@ class File extends React.Component {
         this.handleClick = this.handleClick.bind(this);
         this.processUpload = this.processUpload.bind(this);
         this.addFile = this.addFile.bind(this);
+        this.editFile = this.editFile.bind(this);
+        this.removeFile = this.removeFile.bind(this);
     }
 
     initialize() {
@@ -27,26 +29,30 @@ class File extends React.Component {
         if (this.props.onClick) {
             return this.props.onClick();
         }
-        // this._fileInput.click();
     }
 
     removeFile(item,e) {
         e.preventDefault();
+        this._fileInput.value = null;
         let files = this.state.files;
         files = _.without(files,_.find(files,item));
         this.setState({ files: files });
     }
 
-    processUpload(e) {
-        if (e.target.files && e.target.files.length > 0) {
-            this.addFile(e.target.files[0]);
-            // reset the input so if the user adds the same image again after removing it from the
-            // list, the onChange event is triggered.
-            e.target.value = '';
+    editFile(item,e) {
+        e.preventDefault();
+        if (this.props.onEdit) {
+            return this.props.onEdit(item,e);
         }
     }
 
-    addFile(file) {
+    processUpload(e) {
+        if (e.target.files && e.target.files.length > 0) {
+            this.addFile(e.target.files[0]);
+        }
+    }
+
+    addFile(file,noTrigger) {
         const reader = new FileReader();
         const createFile = (event,file) => {
             let files = this.state.files;
@@ -54,11 +60,17 @@ class File extends React.Component {
                 id: sha1(`${file.name}${file.size}${event.target.result}`),
                 name: file.name,
                 size: file.size,
-                url: `url(${event.target.result})`
+                url: event.target.result
             };
             if (this.props.multiple) {
                 files.push(data);
+                if (this.props.onChange) {
+                    this.props.onChange(files);
+                }
                 return this.setState({ files: files });
+            }
+            if (this.props.onChange && noTrigger !== true) {
+                this.props.onChange(data);
             }
             return this.setState({ files: [ data ]});
         };
@@ -68,6 +80,12 @@ class File extends React.Component {
             };
         })(file);
         reader.readAsDataURL(file);
+    }
+
+    componentDidUpdate() {
+        if (this.props.onUpdate && this.state.files.length > 0) {
+            this.props.onUpdate(this.state.files);
+        }
     }
 
     render() {
@@ -88,6 +106,7 @@ class File extends React.Component {
             width: 80,
             cursor: 'pointer'
         };
+        let file = this.state.files.length > 0 ? this.state.files[0] : '';
         return (
             <div className="field">
                 {this.props.label ? <label>{ this.props.label }</label> : ''}
@@ -105,6 +124,7 @@ class File extends React.Component {
                         style={ fileInputStyle }
                         onChange={ this.processUpload }
                     />
+                    {this.props.multiple ? '' : <input type="hidden" name={ `${this.props.name}` } value={ file.url || '' } /> }
                     {this.state.files.map((item,key) => {
                         let itemStyle = {
                             height: '80px',
@@ -112,12 +132,14 @@ class File extends React.Component {
                             backgroundColor: 'rgba(0,0,0,0.8)',
                             marginRight: '5px',
                             borderRadius: '4px',
-                            backgroundImage: item.url
+                            backgroundSize: 'cover',
+                            backgroundImage: item.url ? `url(${item.url})` : ''
                         };
                         return <div key={ key } className="item file upload" style={ itemStyle }>
+                            {this.props.multiple ? <input type="hidden" readOnly name={ `${this.props.name}[]` } value={item.url} /> : '' }
                             <div className="file settings">
                                 <button className="close button" onClick={ this.removeFile.bind(this,item) }><i className="close icon"></i></button>
-                                <button className="edit button"><i className="icon-write icon"></i></button>
+                                <button className="edit button" onClick={ this.editFile.bind(this,item) }><i className="icon-write icon"></i></button>
                             </div>
                         </div>;
                     })}

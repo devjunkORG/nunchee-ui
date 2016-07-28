@@ -8,6 +8,7 @@ class Table extends React.Component {
 
     constructor(props) {
         super(props);
+        this.checkPosition = this.checkPosition.bind(this);
     }
 
     componentWillMount() {
@@ -22,8 +23,34 @@ class Table extends React.Component {
             rows.unshift(this.props.defaultRow);
         }
         this.state = {
-            rows: []
+            rows: [],
+            atBottom: false
         };
+    }
+
+    componentDidMount() {
+        document.addEventListener('scroll', this.checkPosition, true);
+    }
+    componentWillUnmount() {
+        document.removeEventListener('scroll', this.checkPosition, true);
+    }
+
+    checkPosition(e) {
+        let rect = this._bottom.getBoundingClientRect();
+        let viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+        if (!(rect.bottom < 0 || rect.top - viewHeight >= 0) && this.props.onBottom) {
+            if (!this.state.atBottom) {
+                this.setState({ atBottom: true });
+                this.props.onBottom(e);
+            }
+        } else {
+            if (this.state.atBottom) {
+                if (this.props.onLeaveBottom) {
+                    this.props.onLeaveBottom(e);
+                }
+                this.setState({ atBottom: false });
+            }
+        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -49,18 +76,29 @@ class Table extends React.Component {
         });
 
         return (
-            <JsonTable
-                className={ classes }
-                rows={ this.state.rows }
-                columns={ this.props.columns }
-                settings={ this.props.settings }
-            />
+            <section>
+                <JsonTable
+                    ref={ table => this._table = table }
+                    className={ classes }
+                    rows={ this.state.rows }
+                    columns={ this.props.columns }
+                    settings={ this.props.settings }
+                />
+                <div ref={ div => this._bottom = div } style={{ padding: '3rem', opacity: this.state.atBottom ? 1 : 0 }} className="ui segment">
+                    <p></p>
+                    <div className="ui active inverted dimmer">
+                        <div className="ui text loader">Cargando</div>
+                    </div>
+                </div>
+            </section>
         );
     }
 }
 
 Table.propTypes = {
-    rows: React.PropTypes.array
+    rows: React.PropTypes.array,
+    onLeaveBottom: React.PropTypes.func,
+    onBottom: React.PropTypes.func
 };
 Table.defaultProps = {
     rows: []
