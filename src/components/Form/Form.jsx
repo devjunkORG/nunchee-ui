@@ -57,7 +57,9 @@ class Form extends React.Component {
         //     }
         // });
         formOptions.onSuccess = (e,fields) => {
-            e.preventDefault();
+            if (e) {
+                e.preventDefault();
+            }
             let action;
             if (this.props.options &&
                 this.props.options.setup &&

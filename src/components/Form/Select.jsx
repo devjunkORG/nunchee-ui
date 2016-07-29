@@ -13,6 +13,9 @@ class Select extends React.Component {
         this.createSelect = this.createSelect.bind(this);
     }
 
+    componentWillMount() {
+
+    }
     componentDidMount() {
         this.createSelect(this.props);
     }
@@ -59,7 +62,12 @@ class Select extends React.Component {
             <div className="field">
                 {this.props.label ? <label>{this.props.label}</label> : ''}
                 <div ref={(select) => this._select = select} className={ classes }>
-                    <input ref={ input => this._selectInput = input }type="hidden" name={this.props.name} value={this.props.defaultValue} />
+                    <input
+                        ref={ input => this._selectInput = input }
+                        type="hidden"
+                        name={this.props.name}
+                        defaultValue={this.props.defaultValue}
+                    />
                     <i className="dropdown icon"></i>
                     <div className="default text">{this.getDefault() || this.props.placeholder}</div>
                     <div className="menu">

@@ -22,16 +22,13 @@ class Separator extends React.Component {
                 <div style={{
                     borderBottom: `1px solid ${this.props.color}`,
                     position: 'relative',
-                    margin: '2rem 0',
-                    width: '100%'
+                    marginBottom: '2rem'
                 }}>
                     <div
                         style={{
                             position: 'absolute',
                             left: '45%',
-                            width: this.props.size || 25,
-                            height: this.props.size || 25,
-                            border: this.props.circled ? `1px solid ${this.props.color}` : 'none',
+                            border: `1px solid ${this.props.color}`,
                             color: this.props.color,
                             borderRadius: '100%',
                             padding: '1rem',
@@ -49,14 +46,12 @@ class Separator extends React.Component {
 Separator.propTypes = {
     children: React.PropTypes.string,
     color: React.PropTypes.string,
-    backgroundColor: React.PropTypes.string,
-    circled: React.PropTypes.bool
+    backgroundColor: React.PropTypes.string
 };
 Separator.defaultProps = {
     children: 'SP',
     backgroundColor: '#fff',
-    color: '#000',
-    circled: false
+    color: '#000'
 };
 
 export default Separator;

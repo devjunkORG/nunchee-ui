@@ -3,14 +3,13 @@ import ImageCropper from 'react-cropper';
 import Form from '../Form/Form';
 import Field from '../Form/Fields';
 import Input from '../Form/Input';
-import config from '../../../config';
+import config from '../../../../config/core';
 import 'react-cropper/node_modules/cropperjs/dist/cropper.css';
 
 class Cropper extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = this.initialize();
         this._onChange = this._onChange.bind(this);
         this._zoomOut = this._zoomOut.bind(this);
         this._zoomIn = this._zoomIn.bind(this);
@@ -23,11 +22,11 @@ class Cropper extends React.Component {
 
     initialize() {
         return {
-            aspectRatio: 4/1,
+            aspectRatio: this.props.aspectRatio,
             cropResult: '',
-            croppedWidth: 1600,
-            croppedHeight: 900,
-            imageSource: '/img/backdrop.jpg',
+            croppedWidth: this.props.defaultWidth,
+            croppedHeight: this.props.defaultHeight,
+            imageSource: this.props.src,
             backdropSelection: { url: '', sizes: [] },
             mediumhSelection: { url: '', sizes: [] },
             mediumvSelection: { url: '', sizes: [] },
@@ -35,6 +34,17 @@ class Cropper extends React.Component {
             bannerSelection: { url: '', sizes: [] },
             squareSelection: { url: '', sizes: [] }
         };
+    }
+
+    componentWillMount() {
+        this.state = this.initialize();
+    }
+    componentDidMount() {
+        setTimeout(function() {
+            window.dispatchEvent(new Event('resize'));
+        },1000); /* @TODO: fix this. This is just a workaround because react-cropper initializes the
+        cropper canvas on the default size (200x100), probably because it does not recognise the size of the container.
+        What this does, is fake a resize event so that the cropper resets the width because of the responsive feature  */
     }
 
     _zoomOut() {
@@ -128,7 +138,9 @@ class Cropper extends React.Component {
             });
             break;
         }
-
+        if (this.props.onChange) {
+            this.props.onChange(image);
+        }
         this.setState({
             croppedWidth: data.width,
             croppedHeight: data.height,
@@ -145,20 +157,23 @@ class Cropper extends React.Component {
     render() {
         return (
             <div style={{ maxWidth: 960 }}>
-                <h3>Preview Imagen</h3>
                 <Form>
                     <Field>
                         <Input labeled label="URL" placeholder="http://" onChange={ this._setImageSource }/>
                     </Field>
                     <ImageCropper
                         ref="cropper"
-                        src={ this.state.imageSource }
+                        src={ this.props.src }
                         aspectRatio={this.state.aspectRatio}
-                        style={{ width: 960, height: 540}}
+                        style={ {
+                            width: '100%',
+                            height: 400
+                        } }
                         rotatable={ true }
                         cropend={ this._onChange }
                         crossOrigin={ this.state.imageSource }
                         zoomOnWheel={ false }
+                        viewMode={ 1 }
                     />
                     <div className="cropper actions" style={{ display: 'flex' }}>
                         <button
@@ -305,7 +320,10 @@ Cropper.propTypes = {
 };
 Cropper.defaultProps = {
     aspectRatio: 16/9,
+    defaultWidth: 1600,
+    defaultHeight: 900,
     guides: false,
+    src: '',
     style: {},
     onCrop: Cropper._onCrop,
     crop: Cropper._crop

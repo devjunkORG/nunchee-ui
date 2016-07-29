@@ -84,11 +84,19 @@ class Table extends React.Component {
                     columns={ this.props.columns }
                     settings={ this.props.settings }
                 />
-                <div ref={ div => this._bottom = div } style={{ padding: '3rem', opacity: this.state.atBottom ? 1 : 0 }} className="ui segment">
+                <div ref={ div => this._bottom = div } style={{ padding: '4rem', opacity: this.state.atBottom ? 1 : 0 }} className="ui segment">
                     <p></p>
-                    <div className="ui active inverted dimmer">
-                        <div className="ui text loader">Cargando</div>
-                    </div>
+                        <div className="ui active inverted dimmer">
+                            { this.props.loading ? (
+                                <div className="ui text loader">Cargando</div>
+                            ) : (
+                                <div style={{padding: '0.5rem 0'}}>
+                                    {this.props.loadingText ? (
+                                        this.props.loadingText
+                                    ) : <span></span>}
+                                </div>
+                            )}
+                        </div>
                 </div>
             </section>
         );
