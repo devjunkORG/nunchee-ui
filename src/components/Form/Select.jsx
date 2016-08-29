@@ -3,7 +3,13 @@ import React from 'react';
 import classNames from 'classnames';
 import language from 'nunchee-language';
 language('es');
-import _ from 'lodash';
+import { isEqual, find, isArray, isObject } from 'lodash';
+const _ = {
+    isEqual: isEqual,
+    isArray: isArray,
+    isObject: isObject,
+    find: find
+};
 
 class Select extends React.Component {
 
@@ -23,10 +29,15 @@ class Select extends React.Component {
         if (!_.isEqual(props,this.props)) {
             this.createSelect(props);
         }
+        let dropdown = $(this._select);
+        setTimeout(function() { dropdown.dropdown('set selected',props.defaultValue); },500);
     }
 
     createSelect(props) {
-        let options = {};
+        let options = {
+            selectOnKeydown: false,
+            forceSelection: false
+        };
         if (props.onChange && props.onChange instanceof Function) {
             options.onChange = props.onChange;
         }
@@ -84,7 +95,7 @@ class Select extends React.Component {
                                     );
                                 }
                                 return (
-                                    <div key={i} className="item" data-value={v._id || v.value}>{language()._(v.name)}</div>
+                                    <div key={i} className="item" data-value={v[this.props.keyName || '_id'] || v.value}>{language()._(v.name || v.title)}</div>
                                 );
                             })
                             :

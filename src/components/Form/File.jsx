@@ -1,7 +1,15 @@
 import React from 'react';
 import AddButton from '../Buttons/addBig';
 import sha1 from 'sha1';
-import _ from 'lodash';
+import { isArray, isString, isObject, isEmpty, find, without, } from 'lodash';
+const _ = {
+    isArray: isArray,
+    isString: isString,
+    isObject: isObject,
+    isEmpty: isEmpty,
+    find: find,
+    without: without
+};
 
 class File extends React.Component {
 
@@ -12,11 +20,20 @@ class File extends React.Component {
         this.addFile = this.addFile.bind(this);
         this.editFile = this.editFile.bind(this);
         this.removeFile = this.removeFile.bind(this);
+        this.removeDefault = this.removeDefault.bind(this);
     }
 
     initialize() {
+        let defaultValue = [];
+        if (this.props.defaultValue && _.isArray(this.props.defaultValue)) {
+            defaultValue = this.props.defaultValue;
+        }
+        if (this.props.defaultValue && (_.isString(this.props.defaultValue) || _.isObject(this.props.defaultValue))) {
+            defaultValue = [ this.props.defaultValue ];
+        }
         return {
-            files: []
+            files: [],
+            defaultValue: defaultValue
         };
     }
 
@@ -37,6 +54,12 @@ class File extends React.Component {
         let files = this.state.files;
         files = _.without(files,_.find(files,item));
         this.setState({ files: files });
+    }
+
+    removeDefault(item,e) {
+        e.preventDefault();
+        let files = _.clone(this.state.defaulValue);
+        this.setState({ defaultValue: _.without(files,item)});
     }
 
     editFile(item,e) {
@@ -101,11 +124,31 @@ class File extends React.Component {
             position: 'absolute',
             opacity: 0,
             top: 0,
+            left: 0,
             bottom: 0,
             height: 80,
             width: 80,
-            cursor: 'pointer'
+            cursor: 'pointer',
+            zIndex: 9999
         };
+        let defaultFiles = this.state.defaultValue.map((file,key) => {
+            let itemStyle = {
+                height: '80px',
+                width: '80px',
+                marginRight: '5px',
+                borderRadius: '4px',
+                backgroundSize: 'cover',
+                backgroundImage: _.isObject(file) ? `url(${file.url})` : `url(${file})`
+            };
+            return (
+                <div key={key} className="item file upload" style={ itemStyle }>
+                    {_.isObject(file) ? <input type="hidden" value={ file._id } name={ `${this.props.name}` } /> : '' }
+                    <div className="file settings">
+                        <button className="close button" onClick={ this.removeDefault.bind(this,file) }><i className="close icon"></i></button>
+                    </div>
+                </div>
+            );
+        });
         let file = this.state.files.length > 0 ? this.state.files[0] : '';
         return (
             <div className="field">
@@ -124,12 +167,12 @@ class File extends React.Component {
                         style={ fileInputStyle }
                         onChange={ this.processUpload }
                     />
-                    {this.props.multiple ? '' : <input type="hidden" name={ `${this.props.name}` } value={ file.url || '' } /> }
+                    {defaultFiles}
+                    {this.props.multiple ? '' : (!_.isEmpty(file) ? <input type="hidden" name={ `${this.props.name}` } value={ file.url || '' } /> : '') }
                     {this.state.files.map((item,key) => {
                         let itemStyle = {
                             height: '80px',
                             width: '80px',
-                            backgroundColor: 'rgba(0,0,0,0.8)',
                             marginRight: '5px',
                             borderRadius: '4px',
                             backgroundSize: 'cover',
@@ -148,5 +191,8 @@ class File extends React.Component {
         );
     }
 }
+File.defaultProps = {
+    defaultValue: []
+};
 
 export default File;

@@ -1,6 +1,10 @@
 import React from 'react';
 import { Blocks } from './draft/index.js';
 import Editor from 'draft-wysiwyg';
+import { isEmpty } from 'lodash';
+const _ = {
+    isEmpty: isEmpty
+};
 
 //<Editor className="rich input" placeholder={ this.props.placeholder } editorState={editorState} onChange={this.onChange} suppressContentEditableWarning />
 
@@ -9,6 +13,16 @@ class Textarea extends React.Component {
     constructor(props) {
         super(props);
         this.focusRichEditor = this.focusRichEditor.bind(this);
+    }
+
+    componentWillMount() {
+        this.state = { value : null };
+    }
+
+    componentDidMount() {
+        if (_.isEmpty(this.props.value)) {
+            this.setState({ value: null });
+        }
     }
 
     focusRichEditor() {
@@ -30,11 +44,17 @@ class Textarea extends React.Component {
     }
 
     render() {
+        let editorState = !_.isEmpty(this.props.editorState) ? this.props.editorState : null;
         if (this.props.rich) {
             return (
                 <div onClick={ this.focusRichEditor } className="rich textarea field">
                     <label>{ this.props.label }</label>
-                    <Editor ref={ editor => this._editor = editor } {...this.props} blockTypes={ Blocks }></Editor>
+                    <Editor
+                        ref={ editor => this._editor = editor }
+                        value={ editorState }
+                        {...this.props}
+                        blockTypes={ Blocks }>
+                    </Editor>
                 </div>
             );
         } else {

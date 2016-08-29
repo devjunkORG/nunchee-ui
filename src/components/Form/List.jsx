@@ -1,5 +1,8 @@
 import React from 'react';
-import _ from 'lodash';
+import { take } from 'lodash';
+const _ = {
+    take: take
+};
 
 class List extends React.Component {
 

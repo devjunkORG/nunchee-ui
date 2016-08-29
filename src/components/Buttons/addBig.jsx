@@ -1,5 +1,8 @@
 import React from 'react';
-import _ from 'lodash';
+import { forIn } from 'lodash';
+const _ = {
+    forIn: forIn
+};
 
 class addBig extends React.Component {
 
@@ -21,8 +24,11 @@ class addBig extends React.Component {
             alignItems: 'center',
             width: '80px',
             height: '80px',
-            border: '2px dashed #d6d6d6',
-            marginRight: '10px'
+            backgroundColor: '#00b7c0',
+            marginRight: '10px',
+            opacity: '0.8',
+            color: '#ffffff',
+            boxShadow: '0 1px 4px 0 rgba(0, 0, 0, 0.25)'
         };
         if (this.props.style) {
             _.forIn(this.props.style,(value,key) => {

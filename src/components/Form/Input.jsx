@@ -40,18 +40,25 @@ class Input extends React.Component {
     }
 
     render() {
+        const { label, labeled, left, icon, maxLength, required, ...rest } = this.props;
         let fieldClasses = classNames({
-            ui: this.props.labeled,
-            labeled: this.props.labeled,
-            fluid: this.props.labeled,
-            input: this.props.labeled,
-            field: !this.props.labeled,
-            left: this.props.left ? true : false,
-            icon: this.props.icon ? true : false
+            ui: labeled,
+            labeled: labeled,
+            fluid: labeled,
+            input: labeled,
+            field: !labeled,
+            left: left ? true : false,
+            icon: icon ? true : false
+        });
+        let inputClasses = classNames({
+            ui: true,
+            input: true,
+            corner: required,
+            labeled: labeled || required,
         });
         let labelClasses = classNames({
-            ui: this.props.labeled,
-            label: this.props.label
+            ui: labeled,
+            label: label
         });
         /*let inputClasses = classNames({
             fluid: this.props.fluid
@@ -59,17 +66,24 @@ class Input extends React.Component {
         return (
             <div className="field">
                 <div className={fieldClasses}>
-                    <label className={labelClasses}>{this.props.label}</label>
-                    <input
-                        ref={this.props.name}
-                        {...this.props}
-                        onChange={ this.handleChange }
-                    />
-                    {this.props.icon ?
-                        <i className={`${this.props.icon} icon`}></i> : ''
-                    }
+                    <label className={labelClasses}>{label}</label>
+                    <div className={inputClasses}>
+                        <input
+                            ref={name}
+                            {...rest}
+                            onChange={ this.handleChange }
+                        />
+                        {this.props.icon ?
+                            <i className={`${icon} icon`}></i> : ''
+                        }
+                        {this.props.required ?
+                            <div className="ui red corner label">
+                                <i className="asterisk white icon"></i>
+                            </div> : ''
+                        }
+                    </div>
                     {/* Display character count if maxLength is set*/}
-                    {this.props.maxLength ?
+                    {maxLength ?
                         <p
                             ref={wordCount => { this._wordCount = wordCount; } }
                             className={ this._wordCountClass }>

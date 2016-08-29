@@ -1,7 +1,5 @@
 /* global $ */
 import React from 'react';
-import _ from 'lodash';
-
 import Fields from './Fields';
 import Input from './Input';
 import Select from './Select';
@@ -34,6 +32,7 @@ class Form extends React.Component {
     }
 
     onSubmit(e) {
+        e.preventDefault();
         if (this.props.onSubmit) {
             return this.props.onSubmit(e);
         }
@@ -71,10 +70,11 @@ class Form extends React.Component {
             if (!this.props.onSubmit && action.length < 1) {
                 return false;
             }
+            $(this._form).closest('.ui.modal').modal('hide');
             this.submit(null,action,fields);
         };
         formOptions.onFailure = (errors,fields) => {
-            console.log(errors,fields);
+            return false;
         };
         if (!this.props.options || !this.props.options.fields) {
             return $(this._form).form(formOptions);

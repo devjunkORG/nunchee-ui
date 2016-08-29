@@ -1,8 +1,11 @@
 /* global $ */
 import React from 'react';
 import classNames from 'classnames';
-import ReactDOM from 'react-dom';
-import _ from 'lodash';
+import { isObject, isString } from 'lodash';
+const _ = {
+    isObject: isObject,
+    isString: isString
+};
 
 class Modal extends React.Component {
 
@@ -17,9 +20,8 @@ class Modal extends React.Component {
         //this.forceUpdate();
         let options = {
             onHidden: this.destroyModal,
-            onApprove: () => { return false; },
-            onDeny: () => { return false; },
-            allowMultiple: this.props.options.allowMultiple || true
+            allowMultiple: this.props.options.allowMultiple || true,
+            closable: false
         };
         if (this.props.options) {
             for (let i in this.props.options) {
@@ -56,9 +58,9 @@ class Modal extends React.Component {
         if (hasForm) {
             return $(forms[0]).form('validate form');
         }
-        if (_.find(this.props.options,{ closable: false })) {
-            return false;
-        }
+        // if (_.find(this.props.options,{ closable: false })) {
+        //     return false;
+        // }
 
     }
 
