@@ -19,4 +19,6 @@ export { default as Modal } from './components/Modal/Modal';
 export { default as Playlist } from './components/Playlist/Playlist';
 export { default as Separator } from './components/Separator/Separator';
 export { default as Table } from './components/Table/Table';
+export { default as Filter } from './components/Filter';
+export { defautlt as Confirm } from './components/Modal/Confirm';
 export { Menu, Tab, TabSegments } from './components/tabularMenu';
