@@ -3,7 +3,7 @@ import ImageCropper from 'react-cropper';
 import Form from '../Form/Form';
 import Field from '../Form/Fields';
 import Input from '../Form/Input';
-import config from '../../../../config/core';
+import config from '../../config';
 import 'react-cropper/node_modules/cropperjs/dist/cropper.css';
 
 class Cropper extends React.Component {
