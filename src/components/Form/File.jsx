@@ -26,11 +26,11 @@ class File extends React.Component {
 
     initialize() {
         let defaultValue = [];
-        if (this.props.defaultValue && _.isArray(this.props.defaultValue)) {
-            defaultValue = this.props.defaultValue;
-        }
         if (this.props.defaultValue && (_.isString(this.props.defaultValue) || _.isObject(this.props.defaultValue))) {
             defaultValue = [ this.props.defaultValue ];
+        }
+        if (this.props.defaultValue && _.isArray(this.props.defaultValue)) {
+            defaultValue = this.props.defaultValue;
         }
         return {
             files: [],
