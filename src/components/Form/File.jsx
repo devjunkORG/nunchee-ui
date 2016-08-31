@@ -1,14 +1,15 @@
 import React from 'react';
 import AddButton from '../Buttons/addBig';
 import sha1 from 'sha1';
-import { isArray, isString, isObject, isEmpty, find, without, } from 'lodash';
+import { isArray, isString, isObject, isEmpty, find, without, clone } from 'lodash';
 const _ = {
     isArray: isArray,
     isString: isString,
     isObject: isObject,
     isEmpty: isEmpty,
     find: find,
-    without: without
+    without: without,
+    clone: clone
 };
 
 class File extends React.Component {
