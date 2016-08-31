@@ -1,6 +1,6 @@
 {
   "name": "nunchee-ui",
-  "version": "1.6.0",
+  "version": "1.6.4",
   "description": "Nunchee UI ReactJS Components",
   "main": "lib/index.js",
   "scripts": {
