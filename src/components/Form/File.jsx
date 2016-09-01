@@ -86,7 +86,7 @@ class File extends React.Component {
                 size: file.size,
                 url: event.target.result
             };
-            if (this.props.multiple) {
+            if (this.props.multiple && noTrigger !== true) {
                 files.push(data);
                 if (this.props.onChange) {
                     this.props.onChange(files);
