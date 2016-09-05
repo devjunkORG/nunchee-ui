@@ -45,6 +45,7 @@ class Select extends React.Component {
             options.allowAdditions = props.allowAdditions;
         }
         $(this._select).dropdown(options);
+        $(this._select).click(e => { e.stopPropagation(); });
     }
 
     getDefault() {
