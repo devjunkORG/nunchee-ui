@@ -82,7 +82,7 @@ class Cropper extends React.Component {
     }
 
     _onChange() {
-        let image = this.refs.cropper.getCroppedCanvas().toDataURL();
+        let image = this.refs.cropper.getCroppedCanvas().toDataURL('image/png');
         let data = this.refs.cropper.getData();
         let imageData = this.refs.cropper.getImageData();
 
