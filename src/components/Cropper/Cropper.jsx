@@ -27,6 +27,7 @@ class Cropper extends React.Component {
             croppedWidth: this.props.defaultWidth,
             croppedHeight: this.props.defaultHeight,
             imageSource: this.props.src,
+            cuts: [],
             backdropSelection: { url: '', sizes: [] },
             mediumhSelection: { url: '', sizes: [] },
             mediumvSelection: { url: '', sizes: [] },
@@ -86,60 +87,71 @@ class Cropper extends React.Component {
         image = image.toDataURL('image/jpeg',0.4);
         let data = this.refs.cropper.getData();
         let imageData = this.refs.cropper.getImageData();
+        let cuts = this.state.cuts;
 
-        switch(this.state.aspectRatio) {
-        case 16/9:
-            this.setState({
-                backdropSelection: {
-                    url: image,
-                    sizes: this._checkSizes('backdrop',data)
+        const doCut = ratio => {
+            const options = {
+                '16/9': () => {
+                    return {
+                        backdropSelection: {
+                            url: image,
+                            sizes: this._checkSizes('backdrop',data)
+                        }
+                    };
+                },
+                '2/3': () => {
+                    return {
+                        posterSelection: {
+                            url: image,
+                            sizes: this._checkSizes('poster',data)
+                        }
+                    };
+                },
+                '4/3': () => {
+                    return {
+                        mediumhSelection: {
+                            url: image,
+                            sizes: this._checkSizes('mediumh',data)
+                        }
+                },
+                '3/4': () => {
+                    return {
+                        mediumvSelection: {
+                            url: image,
+                            sizes: this._checkSizes('mediumv',data)
+                        }
+                },
+                '1/1': () => {
+                    return {
+                        squareSelection: {
+                            url: image,
+                            sizes: this._checkSizes('square',data)
+                        }
+                    };
+                },
+                '5/1': () {
+                    return {
+                        bannerSelection: {
+                            url: image,
+                            sizes: this._checkSizes('banner',data)
+                        }
+                    };
                 }
-            });
-            break;
-        case 2/3:
-            this.setState({
-                posterSelection: {
-                    url: image,
-                    sizes: this._checkSizes('poster',data)
-                }
-            });
-            break;
-        case 4/3:
-            this.setState({
-                mediumhSelection: {
-                    url: image,
-                    sizes: this._checkSizes('mediumh',data)
-                }
-            });
-            break;
-        case 3/4:
 
-            this.setState({
-                mediumvSelection: {
-                    url: image,
-                    sizes: this._checkSizes('mediumv',data)
-                }
-            });
-            break;
-        case 1/1:
-            this.setState({
-                squareSelection: {
-                    url: image,
-                    sizes: this._checkSizes('square',data)
-                }
-            });
-            break;
-        case 5/1:
-            this.setState({
-                bannerSelection: {
-                    url: image,
-                    sizes: this._checkSizes('banner',data)
-                }
-            });
-            break;
-        }
+            };
+            if (typeof options[ratio] !== 'function') {
+                throw new Error('Invalid option');
+            }
+            let result = options[ratio];
+            cuts.push(result);
+            this.setState(result);
+            this.setState({ cuts: cuts });
+        };
+
+        doCut(this.state.aspectRatio);
+
         if (this.props.onChange) {
-            this.props.onChange(image);
+            this.props.onChange(image,this.state.cuts);
         }
         this.setState({
             croppedWidth: data.width,

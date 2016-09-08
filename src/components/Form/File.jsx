@@ -169,7 +169,7 @@ class File extends React.Component {
                         onChange={ this.processUpload }
                     />
                     {defaultFiles}
-                    {this.props.multiple ? '' : (!_.isEmpty(file) ? <input type="hidden" name={ `${this.props.name}` } value={ file.url || '' } /> : '') }
+                    {this.props.multiple ? '' : (!_.isEmpty(file) ? <input type="hidden" name={ `${this.props.name}` } value={ file.url || file._id } /> : '') }
                     {this.state.files.map((item,key) => {
                         let itemStyle = {
                             height: '80px',
