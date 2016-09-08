@@ -145,7 +145,7 @@ class Cropper extends React.Component {
             let result = options[ratio]();
             let exists;
             cuts.forEach((v,k) => {
-                console.log(result,v);
+                console.log(Object.keys(result)[0],Object.keys(v)[0])
             });
             cuts.push(result);
             this.setState(result);
