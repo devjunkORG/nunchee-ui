@@ -113,6 +113,7 @@ class Cropper extends React.Component {
                             url: image,
                             sizes: this._checkSizes('mediumh',data)
                         }
+                    };
                 },
                 '3/4': () => {
                     return {
@@ -120,6 +121,7 @@ class Cropper extends React.Component {
                             url: image,
                             sizes: this._checkSizes('mediumv',data)
                         }
+                    };
                 },
                 '1/1': () => {
                     return {
@@ -129,7 +131,7 @@ class Cropper extends React.Component {
                         }
                     };
                 },
-                '5/1': () {
+                '5/1': () => {
                     return {
                         bannerSelection: {
                             url: image,
