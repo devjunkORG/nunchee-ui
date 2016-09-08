@@ -91,56 +91,54 @@ class Cropper extends React.Component {
 
         const doCut = ratio => {
             console.log(ratio);
-            const options = {
-                '16/9': () => {
-                    return {
-                        backdropSelection: {
-                            url: image,
-                            sizes: this._checkSizes('backdrop',data)
-                        }
-                    };
-                },
-                '2/3': () => {
-                    return {
-                        posterSelection: {
-                            url: image,
-                            sizes: this._checkSizes('poster',data)
-                        }
-                    };
-                },
-                '4/3': () => {
-                    return {
-                        mediumhSelection: {
-                            url: image,
-                            sizes: this._checkSizes('mediumh',data)
-                        }
-                    };
-                },
-                '3/4': () => {
-                    return {
-                        mediumvSelection: {
-                            url: image,
-                            sizes: this._checkSizes('mediumv',data)
-                        }
-                    };
-                },
-                '1/1': () => {
-                    return {
-                        squareSelection: {
-                            url: image,
-                            sizes: this._checkSizes('square',data)
-                        }
-                    };
-                },
-                '5/1': () => {
-                    return {
-                        bannerSelection: {
-                            url: image,
-                            sizes: this._checkSizes('banner',data)
-                        }
-                    };
-                }
-
+            const options = {};
+            options[(16/9).toString()] = () => {
+                return {
+                    backdropSelection: {
+                        url: image,
+                        sizes: this._checkSizes('backdrop',data)
+                    }
+                };
+            };
+            options[(2/3).toString()] = () => {
+                return {
+                    posterSelection: {
+                        url: image,
+                        sizes: this._checkSizes('poster',data)
+                    }
+                };
+            };
+            options[(4/3).toString()] = () => {
+                return {
+                    mediumhSelection: {
+                        url: image,
+                        sizes: this._checkSizes('mediumh',data)
+                    }
+                };
+            };
+            options[(3/4).toString()] = () => {
+                return {
+                    mediumvSelection: {
+                        url: image,
+                        sizes: this._checkSizes('mediumv',data)
+                    }
+                };
+            };
+            options['1'] = () => {
+                return {
+                    squareSelection: {
+                        url: image,
+                        sizes: this._checkSizes('square',data)
+                    }
+                };
+            };
+            options['5'] = () => {
+                return {
+                    bannerSelection: {
+                        url: image,
+                        sizes: this._checkSizes('banner',data)
+                    }
+                };
             };
             if (typeof options[ratio] !== 'function') {
                 throw new Error('Invalid option');
