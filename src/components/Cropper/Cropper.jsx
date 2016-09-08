@@ -144,12 +144,16 @@ class Cropper extends React.Component {
             }
             let result = options[ratio]();
             let exists;
-            cuts.forEach((v,k) => {
-                console.log(Object.keys(result)[0],Object.keys(v)[0])
+            cuts.forEach(v => {
+                if (Object.keys(result)[0] == Object.keys(v)[0]) {
+                    exists = true;
+                }
             });
-            cuts.push(result);
-            this.setState(result);
-            this.setState({ cuts: cuts });
+            if (!exists) {
+                cuts.push(result);
+                this.setState(result);
+                this.setState({ cuts: cuts });
+            }
         };
 
         doCut(this.state.aspectRatio);
