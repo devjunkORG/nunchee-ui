@@ -90,7 +90,6 @@ class Cropper extends React.Component {
         let cuts = this.state.cuts;
 
         const doCut = ratio => {
-            console.log(ratio);
             const options = {};
             options[(16/9).toString()] = () => {
                 return {
