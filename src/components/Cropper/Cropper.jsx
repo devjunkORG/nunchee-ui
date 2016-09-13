@@ -146,10 +146,12 @@ class Cropper extends React.Component {
             let exists;
             cuts.forEach(v => {
                 if (Object.keys(result)[0] == Object.keys(v)[0]) {
+                    console.log(v);
                     cuts[Object.keys(v)[0]] = v;
                     exists = true;
                 }
             });
+            console.log(result);
             if (!exists) {
                 cuts.push(result);
             }
