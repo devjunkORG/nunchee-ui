@@ -143,15 +143,12 @@ class Cropper extends React.Component {
                 throw new Error('Invalid option');
             }
             let result = options[ratio]();
-            let exists;
+            let exists = false;
             cuts.forEach(v => {
                 if (Object.keys(result)[0] == Object.keys(v)[0]) {
-                    console.log(v);
-                    cuts[Object.keys(v)[0]] = v;
                     exists = true;
                 }
             });
-            console.log(result);
             if (!exists) {
                 cuts.push(result);
             }
