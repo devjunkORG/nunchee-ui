@@ -160,7 +160,11 @@ class Cropper extends React.Component {
         doCut(this.state.aspectRatio);
 
         if (this.props.onChange) {
-            this.props.onChange(image,this.state.cuts);
+            let result = {
+                _id: this.props.id,
+                cuts: this.state.cuts
+            };
+            this.props.onChange(image,this.state.cuts,result);
         }
         this.setState({
             croppedWidth: data.width,
