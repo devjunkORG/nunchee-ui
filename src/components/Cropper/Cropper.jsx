@@ -1,9 +1,7 @@
 import React from 'react';
 import ImageCropper from 'react-cropper';
-import Form from '../Form/Form';
-import Field from '../Form/Fields';
-import Input from '../Form/Input';
-import config from '../../../config';
+import { Form, Field, Input } from 'nunchee-ui';
+import config from '../../../../config/core';
 import 'react-cropper/node_modules/cropperjs/dist/cropper.css';
 
 class Cropper extends React.Component {
@@ -28,6 +26,7 @@ class Cropper extends React.Component {
             croppedHeight: this.props.defaultHeight,
             imageSource: this.props.src,
             cuts: [],
+            imageData: {},
             backdropSelection: { url: '', sizes: [] },
             mediumhSelection: { url: '', sizes: [] },
             mediumvSelection: { url: '', sizes: [] },
@@ -89,6 +88,7 @@ class Cropper extends React.Component {
         let imageData = this.refs.cropper.getImageData();
         let cuts = this.state.cuts;
 
+        this.setState({ imageData: data });
         const doCut = ratio => {
             const options = {};
             options[(16/9).toString()] = () => {
@@ -163,7 +163,7 @@ class Cropper extends React.Component {
                 _id: this.props.id,
                 cuts: this.state.cuts
             };
-            this.props.onChange(image,this.state.cuts,result);
+            this.props.onChange(image,this.state.cuts,this.state.imageData);
         }
         this.setState({
             croppedWidth: data.width,
