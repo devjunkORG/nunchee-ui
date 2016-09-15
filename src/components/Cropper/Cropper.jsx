@@ -29,12 +29,12 @@ class Cropper extends React.Component {
             imageSource: this.props.src,
             cuts: [],
             imageData: {},
-            backdropSelection: { url: '', sizes: [] },
-            mediumhSelection: { url: '', sizes: [] },
-            mediumvSelection: { url: '', sizes: [] },
-            posterSelection: { url: '', sizes: [] },
-            bannerSelection: { url: '', sizes: [] },
-            squareSelection: { url: '', sizes: [] }
+            backdrop: { url: '', sizes: [] },
+            mediumh: { url: '', sizes: [] },
+            mediumv: { url: '', sizes: [] },
+            poster: { url: '', sizes: [] },
+            banner: { url: '', sizes: [] },
+            square: { url: '', sizes: [] }
         };
     }
 
@@ -70,6 +70,12 @@ class Cropper extends React.Component {
     _upload() {
 
     }
+
+    getCrops() {
+        let availableCrops = this.state.cuts.map(crop => {
+            console.log(crops);
+        });
+    }
     _checkSizes(type,cropData) {
         let imageTypes = config.media.imageTypes;
         let imageSizes = config.media.imageSizes;
@@ -84,6 +90,7 @@ class Cropper extends React.Component {
     }
 
     _onChange() {
+        /* In this all the information of the image and the crop is gathered */
         let image = this.refs.cropper.getCroppedCanvas();
         image = image.toDataURL('image/jpeg',0.4);
         let data = this.refs.cropper.getData();
@@ -91,19 +98,24 @@ class Cropper extends React.Component {
         let imageData = this.refs.cropper.getImageData();
         let cuts = this.state.cuts;
 
+        /* figure out which aspect ratio was selected and set the corresponding
+        object. This is to display the preview and also pass the cut information
+        to the onChange callback
+        */
         const doCut = ratio => {
             const options = {};
             options[(16/9).toString()] = () => {
                 return {
-                    backdropSelection: {
+                    backdrop: {
                         url: image,
-                        sizes: this._checkSizes('backdrop',data)
+                        sizes: this._checkSizes('backdrop',data),
+                        crop: data
                     }
                 };
             };
             options[(2/3).toString()] = () => {
                 return {
-                    posterSelection: {
+                    poster: {
                         url: image,
                         sizes: this._checkSizes('poster',data)
                     }
@@ -111,7 +123,7 @@ class Cropper extends React.Component {
             };
             options[(4/3).toString()] = () => {
                 return {
-                    mediumhSelection: {
+                    mediumh: {
                         url: image,
                         sizes: this._checkSizes('mediumh',data)
                     }
@@ -119,7 +131,7 @@ class Cropper extends React.Component {
             };
             options[(3/4).toString()] = () => {
                 return {
-                    mediumvSelection: {
+                    mediumv: {
                         url: image,
                         sizes: this._checkSizes('mediumv',data)
                     }
@@ -127,7 +139,7 @@ class Cropper extends React.Component {
             };
             options['1'] = () => {
                 return {
-                    squareSelection: {
+                    square: {
                         url: image,
                         sizes: this._checkSizes('square',data)
                     }
@@ -135,7 +147,7 @@ class Cropper extends React.Component {
             };
             options['5'] = () => {
                 return {
-                    bannerSelection: {
+                    banner: {
                         url: image,
                         sizes: this._checkSizes('banner',data)
                     }
@@ -254,7 +266,7 @@ class Cropper extends React.Component {
                                 style={ {
                                     width: 170*(16/9),
                                     height: '170px',
-                                    backgroundImage: `url(${this.state.backdropSelection.url})`,
+                                    backgroundImage: `url(${this.state.backdrop.url})`,
                                     backgroundSize: 'cover'
                                 } }
                             >
@@ -267,7 +279,7 @@ class Cropper extends React.Component {
                                 style={ {
                                     width: 170*(2/3),
                                     height: '170px',
-                                    backgroundImage: `url(${this.state.posterSelection.url})`,
+                                    backgroundImage: `url(${this.state.poster.url})`,
                                     backgroundSize: 'cover'
                                 } }
                             >
@@ -280,7 +292,7 @@ class Cropper extends React.Component {
                                 style={ {
                                     width: 170*(4/3),
                                     height: '170px',
-                                    backgroundImage: `url(${this.state.mediumhSelection.url})`,
+                                    backgroundImage: `url(${this.state.mediumh.url})`,
                                     backgroundSize: 'cover'
                                 } }
                             >
@@ -293,7 +305,7 @@ class Cropper extends React.Component {
                                 style={ {
                                     width: 170,
                                     height: '170px',
-                                    backgroundImage: `url(${this.state.squareSelection.url})`,
+                                    backgroundImage: `url(${this.state.square.url})`,
                                     backgroundSize: 'cover'
                                 } }
                             >
@@ -306,7 +318,7 @@ class Cropper extends React.Component {
                                 style={ {
                                     width: 170*(3/4),
                                     height: '170px',
-                                    backgroundImage: `url(${this.state.mediumvSelection.url})`,
+                                    backgroundImage: `url(${this.state.mediumv.url})`,
                                     backgroundSize: 'cover'
                                 } }
                             >
@@ -321,7 +333,7 @@ class Cropper extends React.Component {
                                 style={ {
                                     width: 192*(5),
                                     height: '192px',
-                                    backgroundImage: `url(${this.state.bannerSelection.url})`,
+                                    backgroundImage: `url(${this.state.banner.url})`,
                                     backgroundSize: 'cover'
                                 } }
                             >
