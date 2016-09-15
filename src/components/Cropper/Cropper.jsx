@@ -1,7 +1,7 @@
 import React from 'react';
 import ImageCropper from 'react-cropper';
 import { Form, Field, Input } from 'nunchee-ui';
-import config from '../../../../config/core';
+import config from '../../../config';
 import 'react-cropper/node_modules/cropperjs/dist/cropper.css';
 
 class Cropper extends React.Component {
