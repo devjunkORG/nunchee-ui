@@ -1,6 +1,8 @@
 import React from 'react';
 import ImageCropper from 'react-cropper';
-import { Form, Field, Input } from 'nunchee-ui';
+import Form from '../Form/Form';
+import Field from '../Form/Fields';
+import Input from '../Form/Input';
 import config from '../../../config';
 import 'react-cropper/node_modules/cropperjs/dist/cropper.css';
 
@@ -85,10 +87,10 @@ class Cropper extends React.Component {
         let image = this.refs.cropper.getCroppedCanvas();
         image = image.toDataURL('image/jpeg',0.4);
         let data = this.refs.cropper.getData();
+        this.setState({ imageData: data });
         let imageData = this.refs.cropper.getImageData();
         let cuts = this.state.cuts;
 
-        this.setState({ imageData: data });
         const doCut = ratio => {
             const options = {};
             options[(16/9).toString()] = () => {
